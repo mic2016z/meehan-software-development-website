@@ -26,9 +26,10 @@ businesses in Australia and remotely.
 | Fonts | Fraunces (display), Inter Tight (UI), JetBrains Mono (labels) — self-hosted by `next/font` |
 | Hosting | Vercel |
 
-No database, no API routes, no server-side backend. Everything renders statically. The
-contact form composes a `mailto:` link in the visitor's own email client, so no visitor
-data is collected or stored by the site.
+The site renders statically. The contact form posts to FormSubmit over HTTPS, which
+emails enquiries to the address in `lib/site.ts`. FormSubmit processes the visitor's
+name, email, optional business, selected services and message. There is no local database.
+See [docs/CONTACT.md](docs/CONTACT.md) for activation and delivery checks.
 
 ## Getting started
 
@@ -57,7 +58,7 @@ app/
   services/page.tsx     The four services in detail
   approach/page.tsx     Process, non-negotiables, FAQ (+ FAQPage JSON-LD)
   about/page.tsx        The studio, position on AI, engagement models
-  contact/page.tsx      Contact details and the mailto form
+  contact/page.tsx      Contact details and the email submission form
   not-found.tsx         404
   globals.css           Design tokens and base styles (Tailwind v4 @theme)
   icon.tsx              Generated favicon
@@ -69,7 +70,7 @@ components/
   mark.tsx              Logo mark and wordmark
   approval-demo.tsx     Interactive illustration of the human approval gate
   transcript.tsx        Illustration of an after-hours intake conversation
-  contact-form.tsx      mailto composer
+  contact-form.tsx      FormSubmit email form
   marquee.tsx           Capability ticker
 lib/
   site.ts               All copy and site constants — single source of truth
@@ -103,7 +104,7 @@ vercel --prod
 
 ## Contact
 
-meehansoftwaredev555@gmail.com
+meehansoftwaredec555@gmail.com
 
 ## Licence
 

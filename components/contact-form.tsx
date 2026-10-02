@@ -8,7 +8,6 @@ const fieldClass =
 
 export function ContactForm() {
   const [interests, setInterests] = useState<string[]>([]);
-  const [sent, setSent] = useState(false);
 
   function toggle(title: string) {
     setInterests((current) =>
@@ -18,38 +17,16 @@ export function ContactForm() {
     );
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get("name") ?? "").trim();
-    const company = String(data.get("company") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
-
-    const subject = `Project enquiry${name ? ` — ${name}` : ""}${
-      company ? `, ${company}` : ""
-    }`;
-
-    const body = [
-      name && `Name: ${name}`,
-      company && `Business: ${company}`,
-      email && `Email: ${email}`,
-      interests.length > 0 && `Interested in: ${interests.join(", ")}`,
-      "",
-      "What I'm trying to solve:",
-      message,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-    setSent(true);
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form action={`https://formsubmit.co/${site.email}`} method="POST" className="space-y-8">
+      <input type="hidden" name="_subject" value="New project enquiry — Meehan Software Development" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_next" value={`${site.url}/contact/thanks`} />
+      <input type="hidden" name="interests" value={interests.join(", ") || "Not specified"} />
+      <div hidden aria-hidden="true">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" type="text" name="_honey" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="label block text-ink-3">
@@ -60,6 +37,7 @@ export function ContactForm() {
             name="name"
             type="text"
             required
+            maxLength={150}
             autoComplete="name"
             className={`${fieldClass} mt-3`}
           />
@@ -72,6 +50,7 @@ export function ContactForm() {
             id="company"
             name="company"
             type="text"
+            maxLength={200}
             autoComplete="organization"
             className={`${fieldClass} mt-3`}
           />
@@ -87,6 +66,7 @@ export function ContactForm() {
           name="email"
           type="email"
           required
+          maxLength={254}
           autoComplete="email"
           className={`${fieldClass} mt-3`}
         />
@@ -127,6 +107,7 @@ export function ContactForm() {
           id="message"
           name="message"
           required
+          maxLength={10000}
           rows={6}
           placeholder="The manual bit, the thing that keeps slipping, or the tool you wish existed. Rough is fine."
           className={`${fieldClass} mt-3 resize-y`}
@@ -138,24 +119,14 @@ export function ContactForm() {
           type="submit"
           className="bg-ink px-7 py-4 text-[0.9375rem] font-medium text-paper transition-colors hover:bg-signal"
         >
-          Compose the email
+          Send enquiry
         </button>
         <p className="max-w-xs text-[0.8125rem] leading-relaxed text-ink-3">
-          This opens your own email app with the details filled in. Nothing is stored
-          here &mdash; the site has no database.
+          Your details are sent securely through FormSubmit to my inbox.
+          You may be asked to complete a spam check before sending.
         </p>
       </div>
 
-      {sent ? (
-        <p role="status" className="border-l-2 border-signal bg-paper-2 px-5 py-4 text-[0.9375rem] text-ink-2">
-          Your email client should have opened. If it didn&rsquo;t, send the same details
-          to{" "}
-          <a href={`mailto:${site.email}`} className="border-b border-signal text-ink">
-            {site.email}
-          </a>
-          .
-        </p>
-      ) : null}
     </form>
   );
 }

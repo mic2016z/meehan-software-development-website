@@ -3,7 +3,7 @@ export const site = {
   shortName: "Meehan Software Dev",
   principal: "Michael Meehan",
   role: "Full-stack web app & AI agent developer",
-  email: "meehansoftwaredev555@gmail.com",
+  email: "meehansoftwaredec555@gmail.com",
   location: "Australia",
   locationLong: "Based in Australia. Working remotely with clients anywhere.",
   url: "https://meehan-software-development.vercel.app",
